@@ -1,0 +1,13 @@
+.login-video{
+  border-radius: 1rem 0 0 1rem;
+  object-fit: cover;
+}
+video {
+  object-fit: cover;
+}
+
+@media (max-width: 768px) {
+  video {
+    display: none;
+  }
+}
