@@ -29,27 +29,39 @@
               <h5 class="fw-semibold mb-4 text-center">Sign into your account</h5>
 
               <!-- Login Form -->
-              <form method="post" asp-controller="User" asp-action="LoginUser">
+              <form method="post" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
 
                 <!-- Email -->
-                <div class="form-floating mb-3">
-                  <input type="email" class="form-control" asp-for="Email" placeholder="name@example.com" autocomplete="off">
-                  <label asp-for="Email">Email address</label>
-                  <span class="text-danger" asp-validation-for="Email"></span>
-                </div>
+                <app-custom-input formControlName="emailAddress" [customInput]="{
+                  appearance: 'outline',
+                  type: 'email',
+                  label: 'Email',
+                  id: 'email',
+                  name: 'Email',
+                  placeholder: 'Enter your email',
+                  icon:'email',
+                  hint: 'xyz123@gmail.com',
+                  disabled: false,
+                }"></app-custom-input>
 
                 <!-- Password -->
-                <div class="form-floating mb-3 position-relative">
-                  <input type="password" class="form-control pe-5" id="eye-input" asp-for="Password" placeholder="Password" autocomplete="off">
-                  <label asp-for="Password">Password</label>
-                  <i class="fa-solid fa-eye-slash position-absolute top-50 end-0 translate-middle-y me-3 cursor-pointer"
-                     id="eye" onclick="ToggleEyeIcon('eye','eye-input')"></i>
-                  <span class="text-danger" asp-validation-for="Password"></span>
-                </div>
+                <app-custom-input formControlName="password" [customInput]="{
+                  appearance: 'outline',
+                  type: 'password',
+                  label: 'Password',
+                  id: 'password',
+                  name: 'password',
+                  placeholder: 'Enter password',
+                  icon:'visibility',
+                  toggleIcon: true,
+                  toggleIcons:['visibility','visibility_off'],
+                  toggleTypes:['password','text'],
+                  disabled: false,
+                }"></app-custom-input>
 
                 <!-- Submit Button -->
-                <div class="d-grid mb-3">
-                  <button type="submit" class="btn btn-primary btn-lg shadow-sm">Login</button>
+                <div class="d-grid mt-3 mb-3">
+                  <button type="submit" class="btn btn-primary btn-lg shadow-sm" [disabled]="loginForm.invalid">Login</button>
                 </div>
 
                 <!-- Remember + Forgot -->
