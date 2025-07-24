@@ -1,31 +1,31 @@
-import { Component, EventEmitter, forwardRef, Input, Output } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { Component, EventEmitter, forwardRef, Input, Optional, Output, Self } from '@angular/core';
+import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR, NgControl } from '@angular/forms';
 import { CustomInputInterface } from '../../../core/models/custom-input.interface';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectChange, MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
-import { MatRadioButton } from '@angular/material/radio';
+import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
 import { MatCheckbox } from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-custom-input',
-  imports: [MatFormFieldModule, MatIconModule, MatInputModule, MatSelectModule, MatOptionModule, MatRadioButton, MatCheckbox],
+  imports: [MatFormFieldModule, MatIconModule, MatInputModule, MatSelectModule, MatOptionModule, MatRadioGroup, MatRadioButton, MatCheckbox],
   templateUrl: './custom-input.html',
-  styleUrl: './custom-input.scss',
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => CustomInput),
-      multi: true
-    }
-  ]
+  styleUrl: './custom-input.scss'
 })
 export class CustomInput implements ControlValueAccessor {
   @Input() customInput!: CustomInputInterface;
   @Input() customErrors?: { [Key: string]: string };
   @Output() valueChange = new EventEmitter<string>();
+
+  constructor(@Optional() @Self() private ngControl: NgControl)
+  {
+    if(this.ngControl){
+      ngControl.valueAccessor = this;
+    }
+  }
 
   toggleIndex: number = 0;
 
@@ -78,6 +78,37 @@ export class CustomInput implements ControlValueAccessor {
 
   }
 
+  get formControl(): FormControl {
+    return this.ngControl?.control as FormControl;
+  }
 
+
+  getErrorKeys(): string[] {
+    return this.formControl?.errors ? Object.keys(this.formControl.errors) : [];
+  }
+
+  getErrorMessage(errorKey: string): string {
+    if (this.customErrors && this.customErrors[errorKey]) {
+      return this.customErrors[errorKey];
+    }
+
+    // fallback defaults
+    switch (errorKey) {
+      case 'required':
+        return `${this.customInput.label} is required.`;
+      case 'minlength':
+        return `Minimum ${this.formControl?.errors?.['minlength'].requiredLength} characters required.`;
+      case 'maxlength':
+        return `Maximum ${this.formControl?.errors?.['maxlength'].requiredLength} characters allowed.`;
+      case 'email':
+        return 'Invalid email.';
+      case 'pattern':
+        return 'Invalid pattern.';
+      case 'usernameTaken':
+        return 'Username is already taken.';
+      default:
+        return 'Invalid field.';
+    }
+  }
 
 }
