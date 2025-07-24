@@ -1,6 +1,6 @@
 import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { FieldConfigInterface } from '../../../core/models/field-config.interface';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CustomInput } from '../custom-input/custom-input';
 import { CustomButton } from '../custom-button/custom-button';
 
@@ -57,4 +57,9 @@ export class DynamicForm implements OnInit{
       this.form.markAllAsTouched();
     }
   }
+
+  getFormControl(name: string): FormControl {
+    return this.form.get(name) as FormControl;
+  }
+
 }

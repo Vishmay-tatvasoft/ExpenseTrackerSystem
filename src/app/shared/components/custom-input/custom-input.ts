@@ -66,6 +66,14 @@ export class CustomInput implements ControlValueAccessor {
     this.valueChange.emit(event.value);
   }
 
+  onFileChange(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files?.length) {
+      this.onChange(input.files[0]);
+      this.onTouched();
+    }
+  }
+
 
   toggleIcon(): void {
     if (!this.customInput.toggleIcon || !this.customInput.toggleIcons?.length) return;

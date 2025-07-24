@@ -95,7 +95,7 @@
     }
 
     @case('radio') {
-      <mat-radio-group>
+      <mat-radio-group [formControl] = "formControl">
         @for(option of customInput.options ?? []; track option) {
           <mat-radio-button [value]="option.value">{{ option.label }}</mat-radio-button>
         }
@@ -103,8 +103,79 @@
     }
 
     @case('checkbox') {
-      <mat-checkbox >{{ customInput.label }}</mat-checkbox>
+      <mat-checkbox [formControl] = "formControl">{{ customInput.label }}</mat-checkbox>
     }
+
+    @case('tel') {
+      <input
+        matInput
+        type="tel"
+        [placeholder]="customInput.placeholder"
+        (input)="onInput($event)"
+        (blur)="onTouched()"
+        [id]="customInput.id"
+        [name]="customInput.name"
+        [class]="customInput.class"
+        [formControl]="formControl"
+        autocomplete="tel"
+      />
+    }
+
+    @case('url') {
+      <input
+        matInput
+        type="url"
+        [placeholder]="customInput.placeholder"
+        (input)="onInput($event)"
+        (blur)="onTouched()"
+        [id]="customInput.id"
+        [name]="customInput.name"
+        [class]="customInput.class"
+        [formControl]="formControl"
+        autocomplete="url"
+      />
+    }
+
+    @case('date') {
+      <input
+        matInput
+        type="date"
+        [placeholder]="customInput.placeholder"
+        (input)="onInput($event)"
+        (blur)="onTouched()"
+        [id]="customInput.id"
+        [name]="customInput.name"
+        [class]="customInput.class"
+        [formControl]="formControl"
+      />
+    }
+
+    @case('time') {
+      <input
+        matInput
+        type="time"
+        [placeholder]="customInput.placeholder"
+        (input)="onInput($event)"
+        (blur)="onTouched()"
+        [id]="customInput.id"
+        [name]="customInput.name"
+        [class]="customInput.class"
+        [formControl]="formControl"
+      />
+    }
+
+    @case('file') {
+      <input
+        matInput
+        type="file"
+        [id]="customInput.id"
+        [name]="customInput.name"
+        [class]="customInput.class"
+        (change)="onFileChange($event)"
+        [attr.accept]="customInput.accept || '*'"
+      />
+    }
+
   }
 
   <!-- icon -->
