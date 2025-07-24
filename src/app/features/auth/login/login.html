@@ -1,94 +1,55 @@
-<div class="container py-5">
-  <div class="row justify-content-center">
-    <div class="col-lg-10 col-xl-12">
-      <div class="card shadow border-0 rounded-4 overflow-hidden">
-        <div class="row g-0">
+<form method="post" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
 
-          <!-- Video Side -->
-          <div class="col-md-6 d-md-block">
-            <div class="h-100 w-100">
-              <video #bgVideo autoplay muted loop playsinline preload="auto" loading="lazy" class="w-100 h-100 object-fit-cover">
-                <source src="assets/videos/Login_Video.mp4" type="video/mp4" >
-                Your browser does not support the video tag.
-              </video>
+  <!-- Email -->
+  <app-custom-input [formControl]="emailAddressControl" [customInput]="{
+    appearance: 'outline',
+    type: 'email',
+    label: 'Email',
+    id: 'email',
+    name: 'Email',
+    placeholder: 'Enter your email',
+    icon:'email',
+    hint: 'xyz123@gmail.com',
+    disabled: false,
+  }"></app-custom-input>
 
-            </div>
-          </div>
+  <!-- Password -->
+  <app-custom-input [formControl]="passwordControl" [customInput]="{
+    appearance: 'outline',
+    type: 'password',
+    label: 'Password',
+    id: 'password',
+    name: 'password',
+    placeholder: 'Enter password',
+    icon:'visibility',
+    toggleIcon: true,
+    toggleIcons:['visibility','visibility_off'],
+    toggleTypes:['password','text'],
+    disabled: false,
+  }"></app-custom-input>
 
-          <!-- Form Side -->
-          <div class="col-md-6 bg-light d-flex align-items-center">
-            <div class="p-4 p-md-5 w-100">
-
-              <!-- Logo + Title -->
-              <div class="text-center mb-4">
-                <img src="assets/images/expenses.png" alt="Expense Logo" height="50" class="mb-2" />
-                <h4 class="fw-bold mb-0">Expense Tracker</h4>
-                <small class="text-muted">Smart way to track your expenses</small>
-              </div>
-
-              <h5 class="fw-semibold mb-4 text-center">Sign into your account</h5>
-
-              <!-- Login Form -->
-              <form method="post" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-
-                <!-- Email -->
-                <app-custom-input formControlName="emailAddress" [customInput]="{
-                  appearance: 'outline',
-                  type: 'email',
-                  label: 'Email',
-                  id: 'email',
-                  name: 'Email',
-                  placeholder: 'Enter your email',
-                  icon:'email',
-                  hint: 'xyz123@gmail.com',
-                  disabled: false,
-                }"></app-custom-input>
-
-                <!-- Password -->
-                <app-custom-input formControlName="password" [customInput]="{
-                  appearance: 'outline',
-                  type: 'password',
-                  label: 'Password',
-                  id: 'password',
-                  name: 'password',
-                  placeholder: 'Enter password',
-                  icon:'visibility',
-                  toggleIcon: true,
-                  toggleIcons:['visibility','visibility_off'],
-                  toggleTypes:['password','text'],
-                  disabled: false,
-                }"></app-custom-input>
-
-                <!-- Submit Button -->
-                <div class="d-grid mt-3 mb-3">
-                  <button type="submit" class="btn btn-primary btn-lg shadow-sm" [disabled]="loginForm.invalid">Login</button>
-                </div>
-
-                <!-- Remember + Forgot -->
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                  <div class="form-check">
-                    <input type="checkbox" asp-for="RememberMe" class="form-check-input">
-                    <label class="form-check-label" for="RememberMe">Remember me</label>
-                  </div>
-                  <a asp-controller="User" asp-action="ForgotPassword" class="small text-decoration-none">Forgot password?</a>
-                </div>
-
-                <!-- Register Link -->
-                <div class="text-center">
-                  <p class="mb-0">
-                    <span class="text-muted">Don't have an account?</span>
-                    <a asp-action="Register" asp-controller="User" class="text-primary text-decoration-none fw-semibold">
-                      Register here
-                    </a>
-                  </p>
-                </div>
-
-              </form>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </div>
+  <!-- Submit Button -->
+  <div class="d-grid mt-3 mb-3">
+    <button type="submit" class="btn btn-primary btn-lg shadow-sm" [disabled]="loginForm.invalid">Login</button>
   </div>
-</div>
+
+  <!-- Remember + Forgot -->
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <div class="form-check">
+      <input type="checkbox" asp-for="RememberMe" class="form-check-input">
+      <label class="form-check-label" for="RememberMe">Remember me</label>
+    </div>
+    <a asp-controller="User" asp-action="ForgotPassword" class="small text-decoration-none">Forgot password?</a>
+  </div>
+
+  <!-- Register Link -->
+  <div class="text-center">
+    <p class="mb-0">
+      <span class="text-muted">Don't have an account?</span>
+      <a asp-action="Register" asp-controller="User" class="text-primary text-decoration-none fw-semibold">
+        Register here
+      </a>
+    </p>
+  </div>
+
+</form>
