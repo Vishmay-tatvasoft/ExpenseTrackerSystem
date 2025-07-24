@@ -1,54 +1,136 @@
 <mat-form-field
-  [appearance]="customInput.appearance"
+  [appearance]="customInput.appearance || 'outline'"
   class="w-100 mt-3"
   subscriptSizing="dynamic"
 >
   <!-- label -->
   <mat-label>{{ customInput.label }}</mat-label>
 
-  <!-- input field -->
-  @if(customInput.type === "text" || customInput.type === "number" ||
-  customInput.type === "email" || customInput.type === "password") {
-  <input
-    matInput
-    [type]="customInput.type"
-    [placeholder]="customInput.placeholder"
-    (input)="onInput($event)"
-    (blur)="onTouched()"
-    [id]="customInput.id"
-    [name]="customInput.name"
-    [disabled]="customInput.disabled"
-    [class]="customInput.class"
-    autocomplete="off"
-  />
-  }
+  @switch (customInput.type) {
 
-  <!-- select list -->
-  @if(customInput.type === "select") {
-  <mat-select
-    (selectionChange)="onSelect($event)"
-    [disabled]="customInput.disabled"
-    [id]="customInput.id"
-  >
-    @for(option of customInput.options; track $index) {
-    <mat-option [value]="option.value">{{ option.label }}</mat-option>
+    @case ('text') {
+      <input
+        matInput
+        [type]="customInput.type"
+        [placeholder]="customInput.placeholder"
+        (input)="onInput($event)"
+        (blur)="onTouched()"
+        [id]="customInput.id"
+        [name]="customInput.name"
+        [disabled]="customInput.disabled"
+        [class]="customInput.class"
+        autocomplete="off"
+      />
     }
-  </mat-select>
+
+    @case ('number') {
+      <input
+        matInput
+        [type]="customInput.type"
+        [placeholder]="customInput.placeholder"
+        (input)="onInput($event)"
+        (blur)="onTouched()"
+        [id]="customInput.id"
+        [name]="customInput.name"
+        [disabled]="customInput.disabled"
+        [class]="customInput.class"
+        autocomplete="off"
+      />
+    }
+
+    @case ('password') {
+      <input
+        matInput
+        [type]="customInput.type"
+        [placeholder]="customInput.placeholder"
+        (input)="onInput($event)"
+        (blur)="onTouched()"
+        [id]="customInput.id"
+        [name]="customInput.name"
+        [disabled]="customInput.disabled"
+        [class]="customInput.class"
+        autocomplete="off"
+      />
+    }
+
+    @case('email'){
+      <input
+        matInput
+        [type]="customInput.type"
+        [placeholder]="customInput.placeholder"
+        (input)="onInput($event)"
+        (blur)="onTouched()"
+        [id]="customInput.id"
+        [name]="customInput.name"
+        [disabled]="customInput.disabled"
+        [class]="customInput.class"
+        autocomplete="off"
+      />
+    }
+
+    @case('select') {
+      <mat-select
+        (selectionChange)="onSelect($event)"
+        [disabled]="customInput.disabled"
+        [id]="customInput.id"
+      >
+        @for(option of customInput.options; track $index) {
+          <mat-option [value]="option.value">{{ option.label }}</mat-option>
+        }
+      </mat-select>
+    }
+
+    @case('textarea'){
+      <textarea
+        matInput
+        [placeholder]="customInput.placeholder"
+        (input)="onInput($event)"
+        (blur)="onTouched()"
+        [id]="customInput.id"
+        [name]="customInput.name"
+        [disabled]="customInput.disabled"
+        [class]="customInput.class"
+        [rows]="customInput.rows || 3"
+      ></textarea>
+    }
+
+    @case('radio') {
+      <mat-radio-group>
+        @for(option of customInput.options ?? []; track option) {
+          <mat-radio-button [value]="option.value">{{ option.label }}</mat-radio-button>
+        }
+      </mat-radio-group>
+    }
+
+    @case('checkbox') {
+      <mat-checkbox >{{ customInput.label }}</mat-checkbox>
+    }
   }
 
   <!-- icon -->
   @if(customInput.icon) {
-  <mat-icon
-    matSuffix
-    [style.cursor]="customInput.toggleIcon ? 'pointer' : 'default'"
-    (click)="customInput.toggleIcon ? toggleIcon() : null"
-  >
-    {{ customInput.icon }}
-  </mat-icon>
+    <mat-icon
+      matSuffix
+      [style.cursor]="customInput.toggleIcon ? 'pointer' : 'default'"
+      (click)="customInput.toggleIcon ? toggleIcon() : null"
+    >
+      {{ customInput.icon }}
+    </mat-icon>
   }
 
   <!-- hint -->
   @if(!customInput.disabled && customInput.hint){
-  <mat-hint>{{ customInput.hint }}</mat-hint>
+    <mat-hint>{{ customInput.hint }}</mat-hint>
+  }
+
+  <!-- error messages -->
+  @if(formControl.invalid && (formControl.touched || formControl.dirty))
+  {
+    <mat-error>
+      @for(error of getErrorKeys(); track $index)
+      {
+        <span>{{ getErrorMessage(error) }}</span>
+      }
+    </mat-error>
   }
 </mat-form-field>

@@ -1,5 +1,5 @@
 export interface CustomInputInterface {
-  appearance: 'outline' | 'fill';
+  appearance?: 'outline' | 'fill';
   type: string;
   placeholder: string;
   value?: string;

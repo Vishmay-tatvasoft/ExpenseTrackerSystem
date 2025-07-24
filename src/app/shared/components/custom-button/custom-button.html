@@ -1,0 +1,11 @@
+<button
+  type="{{ config.type || 'button' }}"
+  class="btn btn-{{ config.style || 'primary' }}{{ config.size ? ' btn-' + config.size : '' }}{{ config.block ? ' w-100' : '' }} {{ config.class || '' }}"
+  [disabled]="config.disabled"
+  [attr.aria-label]="config.ariaLabel || config.label"
+>
+  @if(config.icon) {
+    <i class="bi bi-{{ config.icon }}"></i> <!-- Bootstrap icons -->
+  }
+  {{ config.label }}
+</button>
