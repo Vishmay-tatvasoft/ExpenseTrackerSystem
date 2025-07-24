@@ -17,8 +17,8 @@
         (blur)="onTouched()"
         [id]="customInput.id"
         [name]="customInput.name"
-        [disabled]="customInput.disabled"
         [class]="customInput.class"
+        [formControl]="formControl"
         autocomplete="off"
       />
     }
@@ -32,8 +32,8 @@
         (blur)="onTouched()"
         [id]="customInput.id"
         [name]="customInput.name"
-        [disabled]="customInput.disabled"
         [class]="customInput.class"
+        [formControl]="formControl"
         autocomplete="off"
       />
     }
@@ -47,8 +47,8 @@
         (blur)="onTouched()"
         [id]="customInput.id"
         [name]="customInput.name"
-        [disabled]="customInput.disabled"
         [class]="customInput.class"
+        [formControl]="formControl"
         autocomplete="off"
       />
     }
@@ -62,8 +62,8 @@
         (blur)="onTouched()"
         [id]="customInput.id"
         [name]="customInput.name"
-        [disabled]="customInput.disabled"
         [class]="customInput.class"
+        [formControl]="formControl"
         autocomplete="off"
       />
     }
@@ -71,8 +71,8 @@
     @case('select') {
       <mat-select
         (selectionChange)="onSelect($event)"
-        [disabled]="customInput.disabled"
         [id]="customInput.id"
+        [formControl]="formControl"
       >
         @for(option of customInput.options; track $index) {
           <mat-option [value]="option.value">{{ option.label }}</mat-option>
@@ -88,9 +88,9 @@
         (blur)="onTouched()"
         [id]="customInput.id"
         [name]="customInput.name"
-        [disabled]="customInput.disabled"
         [class]="customInput.class"
         [rows]="customInput.rows || 3"
+        [formControl]="formControl"
       ></textarea>
     }
 
@@ -123,14 +123,14 @@
     <mat-hint>{{ customInput.hint }}</mat-hint>
   }
 
-  <!-- error messages -->
-  @if(shouldShowErrors())
+</mat-form-field>
+<!-- error messages -->
+@for (error of getErrorKeys(); track $index)
+{
+  @if(formControl.invalid && (formControl.touched || formControl.dirty))
   {
     <mat-error>
-      @for(error of getErrorKeys(); track $index)
-      {
-        <span>{{ getErrorMessage(error) }}</span>
-      }
+      {{ getErrorMessage(error) }}
     </mat-error>
   }
-</mat-form-field>
+}
