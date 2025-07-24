@@ -13,20 +13,21 @@ import { FieldConfigInterface } from '../../../core/models/field-config.interfac
   styleUrl: './login.scss'
 })
 export class Login {
-  loginForm!:FormGroup
+  loginForm!: FormGroup
   loginService = inject(LoginService);
   router = inject(Router);
-  @Input() loginCredentials!:LoginInterface;
+  @Input() loginCredentials!: LoginInterface;
 
   constructor(private fb: FormBuilder) {
     this.loginForm = fb.group({
-      emailAddress: ['',[Validators.required,Validators.email]],
-      password: ['',[Validators.required]]
+      emailAddress: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required]],
+      rememberMe: [false]
     });
   }
 
-  onSubmit(): void{
-    if(this.loginForm.invalid) return;
+  onSubmit(): void {
+    if (this.loginForm.invalid) return;
     this.loginService.login(this.loginForm.value).subscribe({
       next: () => {
         this.router.navigate(['/dashboard']);
@@ -37,11 +38,11 @@ export class Login {
     })
   }
 
-  get emailAddressControl(): FormControl{
+  get emailAddressControl(): FormControl {
     return this.loginForm.get('emailAddress') as FormControl;
   }
 
-  get passwordControl(): FormControl{
+  get passwordControl(): FormControl {
     return this.loginForm.get('password') as FormControl;
   }
 
@@ -52,7 +53,7 @@ export class Login {
         label: 'Email',
         placeholder: 'Enter your email',
         id: 'email',
-        name: 'email',
+        name: 'emailAddress',
         icon: 'email',
         hint: 'xyz123@gmail.com',
         disabled: false,
@@ -75,19 +76,26 @@ export class Login {
     },
     {
       inputfield: {
-        name:'rememberMe',
-        label:'Remember Me',
-        type:'checkbox',
-        disabled:false,
-        id:'checkbox',
-        appearance:'outline',
-        placeholder:'',
+        name: 'rememberMe',
+        label: 'Remember Me',
+        type: 'checkbox',
+        disabled: false,
+        id: 'checkbox',
+        appearance: 'outline',
+        placeholder: '',
       }
     }
   ]
 
   onDynamicFormSubmit(loginCredentials: LoginInterface) {
-    
+    this.loginService.login(loginCredentials).subscribe({
+      next: () => {
+        this.router.navigate(['/dashboard']);
+      },
+      error: (error) => {
+        console.error('login failed:', error);
+      }
+    });
     console.log("Dynamic form submit:", loginCredentials);
   }
 

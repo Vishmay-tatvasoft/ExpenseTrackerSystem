@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, forwardRef, inject, Injector, Input, OnInit, Optional, Output, Self } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, EventEmitter, forwardRef, inject, Injector, Input, OnInit, Optional, Output, Self } from '@angular/core';
 import { ControlValueAccessor, FormControl, FormsModule, NG_VALUE_ACCESSOR, NgControl, ReactiveFormsModule } from '@angular/forms';
 import { CustomInputInterface } from '../../../core/models/custom-input.interface';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -31,7 +31,7 @@ export class CustomInput implements ControlValueAccessor {
   @Input() formControl!: FormControl;
   @Input() customErrors?: { [Key: string]: string };
   @Output() valueChange = new EventEmitter<string>();
-
+  
   toggleIndex: number = 0;
 
   onChange = (value: any) => { };
@@ -90,6 +90,7 @@ export class CustomInput implements ControlValueAccessor {
     }
 
   }
+
 
   getErrorKeys(): string[] {
     return this.formControl?.errors ? Object.keys(this.formControl.errors) : [];
