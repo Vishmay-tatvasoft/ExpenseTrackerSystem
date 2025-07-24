@@ -1,4 +1,4 @@
-import { Component, EventEmitter, forwardRef, Input, Optional, Output, Self } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, forwardRef, Input, OnInit, Optional, Output, Self } from '@angular/core';
 import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR, NgControl } from '@angular/forms';
 import { CustomInputInterface } from '../../../core/models/custom-input.interface';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -13,9 +13,10 @@ import { MatCheckbox } from '@angular/material/checkbox';
   selector: 'app-custom-input',
   imports: [MatFormFieldModule, MatIconModule, MatInputModule, MatSelectModule, MatOptionModule, MatRadioGroup, MatRadioButton, MatCheckbox],
   templateUrl: './custom-input.html',
-  styleUrl: './custom-input.scss'
+  styleUrl: './custom-input.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CustomInput implements ControlValueAccessor {
+export class CustomInput implements ControlValueAccessor, OnInit {
   @Input() customInput!: CustomInputInterface;
   @Input() customErrors?: { [Key: string]: string };
   @Output() valueChange = new EventEmitter<string>();
@@ -26,6 +27,12 @@ export class CustomInput implements ControlValueAccessor {
       ngControl.valueAccessor = this;
     }
   }
+  ngOnInit() {
+    if (!this.formControl) {
+      console.warn('FormControl is undefined. Check formControlName usage.');
+    }
+  }
+
 
   toggleIndex: number = 0;
 
@@ -110,5 +117,11 @@ export class CustomInput implements ControlValueAccessor {
         return 'Invalid field.';
     }
   }
+
+  shouldShowErrors(): boolean {
+    const control = this.formControl;
+    return control && control.invalid && (control.touched || control.dirty);
+  }
+
 
 }
