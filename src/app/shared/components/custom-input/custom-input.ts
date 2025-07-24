@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, forwardRef, Input, OnInit, Optional, Output, Self } from '@angular/core';
-import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR, NgControl } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, forwardRef, inject, Injector, Input, OnInit, Optional, Output, Self } from '@angular/core';
+import { ControlValueAccessor, FormControl, FormsModule, NG_VALUE_ACCESSOR, NgControl, ReactiveFormsModule } from '@angular/forms';
 import { CustomInputInterface } from '../../../core/models/custom-input.interface';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -8,31 +8,29 @@ import { MatSelectChange, MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
 import { MatCheckbox } from '@angular/material/checkbox';
+import { CommonModule } from '@angular/common';
+import { debounceTime, tap } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-custom-input',
-  imports: [MatFormFieldModule, MatIconModule, MatInputModule, MatSelectModule, MatOptionModule, MatRadioGroup, MatRadioButton, MatCheckbox],
+  imports: [MatFormFieldModule, MatIconModule, MatInputModule, MatSelectModule, MatOptionModule, MatRadioGroup, MatRadioButton, MatCheckbox, CommonModule,FormsModule,ReactiveFormsModule],
   templateUrl: './custom-input.html',
   styleUrl: './custom-input.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => CustomInput),
+      multi: true
+    }
+  ],
 })
-export class CustomInput implements ControlValueAccessor, OnInit {
+export class CustomInput implements ControlValueAccessor {
   @Input() customInput!: CustomInputInterface;
+  @Input() formControl!: FormControl;
   @Input() customErrors?: { [Key: string]: string };
   @Output() valueChange = new EventEmitter<string>();
-
-  constructor(@Optional() @Self() private ngControl: NgControl)
-  {
-    if(this.ngControl){
-      ngControl.valueAccessor = this;
-    }
-  }
-  ngOnInit() {
-    if (!this.formControl) {
-      console.warn('FormControl is undefined. Check formControlName usage.');
-    }
-  }
-
 
   toggleIndex: number = 0;
 
@@ -85,11 +83,6 @@ export class CustomInput implements ControlValueAccessor, OnInit {
 
   }
 
-  get formControl(): FormControl {
-    return this.ngControl?.control as FormControl;
-  }
-
-
   getErrorKeys(): string[] {
     return this.formControl?.errors ? Object.keys(this.formControl.errors) : [];
   }
@@ -118,10 +111,6 @@ export class CustomInput implements ControlValueAccessor, OnInit {
     }
   }
 
-  shouldShowErrors(): boolean {
-    const control = this.formControl;
-    return control && control.invalid && (control.touched || control.dirty);
-  }
 
 
 }
