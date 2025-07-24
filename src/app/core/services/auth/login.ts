@@ -14,6 +14,6 @@ export class LoginService {
   apiURL = `${environment.apiURI}/auth/Login`;
 
   login(credentials: LoginInterface): Observable<ApiResponseInterface<UserInterface>>{
-    return this.http.post<ApiResponseInterface<UserInterface>>(this.apiURL, credentials);
+    return this.http.post<ApiResponseInterface<UserInterface>>(this.apiURL, credentials, { withCredentials: true });
   }
 }
