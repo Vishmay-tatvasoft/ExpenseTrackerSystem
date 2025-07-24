@@ -1,45 +1,27 @@
 <form [formGroup]="form" class="p-5" (ngSubmit)="onSubmit()">
   @for(field of formJson; track field)
   {
-    @if(field.inputfield.type === 'text' ||
-        field.inputfield.type === 'number' || field.inputfield.type === 'email' ||
-        field.inputfield.type === 'password' || field.inputfield.type === 'tel' ||
-        field.inputfield.type === 'url')
-      {
-          <app-custom-input
-            [formControlName]="field.inputfield.name"
-            [customInput]="{
-                appearance: field.inputfield.appearance || 'outline',
-                label: field.inputfield.label,
-                type: field.inputfield.type || 'text',
-                placeholder: field.inputfield.placeholder,
-                name: field.inputfield.name || '',
-                value: field.inputfield.value || '',
-                hint: field.inputfield.hint || '',
-                class: field.inputfield.class || '',
-                id: field.inputfield.id || '',
-                disabled: field.inputfield.disabled || false,
-                icon: field.inputfield.icon || '',
-                toggleIcon: field.inputfield.toggleIcon || false,
-                toggleIcons: field.inputfield.toggleIcons || [],
-                toggleTypes: field.inputfield.toggleTypes || [],
-
-              }"
-          >
-          </app-custom-input>
-      @if(form.get(field.inputfield.name)?.invalid && form.get(field.inputfield.name)?.touched)
-      {
-        @if(form.get(field.inputfield.name)?.errors?.['required']){
-          <small class="text-danger">{{ field.inputfield.label }} is required</small><br />
-        }
-        @if(form.get(field.inputfield.name)?.errors?.['email']){
-          <small class="tex-danger">Invalid email format</small><br />
-        }
-        @if(form.get(field.inputfield.name)?.errors?.['min']){
-          <small>Minimum value is not met</small><br />
-        }
-      }
-    }
+      <app-custom-input
+        [formControl]="getFormControl(field.inputfield.name)"
+        [customInput]="{
+            appearance: field.inputfield.appearance || 'outline',
+            label: field.inputfield.label,
+            type: field.inputfield.type || 'text',
+            placeholder: field.inputfield.placeholder,
+            name: field.inputfield.name || '',
+            value: field.inputfield.value || '',
+            hint: field.inputfield.hint || '',
+            class: field.inputfield.class || '',
+            id: field.inputfield.id || '',
+            disabled: field.inputfield.disabled || false,
+            icon: field.inputfield.icon || '',
+            toggleIcon: field.inputfield.toggleIcon || false,
+            toggleIcons: field.inputfield.toggleIcons || [],
+            toggleTypes: field.inputfield.toggleTypes || [],
+            accept: field.inputfield.accept || '*'
+          }"
+      >
+      </app-custom-input>
   }
   <app-custom-button
     [config]="{
