@@ -1,200 +1,208 @@
-<mat-form-field
-  [appearance]="customInput.appearance || 'outline'"
-  class="w-100 mt-3"
-  subscriptSizing="dynamic"
->
-  <!-- label -->
-  <mat-label>{{ customInput.label }}</mat-label>
+@if (customInput.type === 'checkbox') {
+  <mat-checkbox
+    class="mt-3"
+    [formControl]="formControl"
+    [id]="customInput.id"
+    [name]="customInput.name"
+  >
+    {{ customInput.label }}
+  </mat-checkbox>
+}
+@else if(customInput.type === 'radio')
+{
+  <mat-radio-group [formControl] = "formControl">
+    @for(option of customInput.options ?? []; track option) {
+      <mat-radio-button [value]="option.value">{{ option.label }}</mat-radio-button>
+    }
+  </mat-radio-group>
+}
+@else {
+  <mat-form-field
+    [appearance]="customInput.appearance || 'outline'"
+    class="w-100 mt-3"
+    subscriptSizing="dynamic"
+  >
+    <!-- label -->
+    <mat-label>{{ customInput.label }}</mat-label>
 
-  @switch (customInput.type) {
+    @switch (customInput.type) {
 
-    @case ('text') {
-      <input
-        matInput
-        [type]="customInput.type"
-        [placeholder]="customInput.placeholder"
-        (input)="onInput($event)"
-        (blur)="onTouched()"
-        [id]="customInput.id"
-        [name]="customInput.name"
-        [class]="customInput.class"
-        [formControl]="formControl"
-        autocomplete="off"
-      />
+      @case ('text') {
+        <input
+          matInput
+          [type]="customInput.type"
+          [placeholder]="customInput.placeholder"
+          (input)="onInput($event)"
+          (blur)="onTouched()"
+          [id]="customInput.id"
+          [name]="customInput.name"
+          [class]="customInput.class"
+          [formControl]="formControl"
+          autocomplete="off"
+        />
+      }
+
+      @case ('number') {
+        <input
+          matInput
+          [type]="customInput.type"
+          [placeholder]="customInput.placeholder"
+          (input)="onInput($event)"
+          (blur)="onTouched()"
+          [id]="customInput.id"
+          [name]="customInput.name"
+          [class]="customInput.class"
+          [formControl]="formControl"
+          autocomplete="off"
+        />
+      }
+
+      @case ('password') {
+        <input
+          matInput
+          [type]="customInput.type"
+          [placeholder]="customInput.placeholder"
+          (input)="onInput($event)"
+          (blur)="onTouched()"
+          [id]="customInput.id"
+          [name]="customInput.name"
+          [class]="customInput.class"
+          [formControl]="formControl"
+          autocomplete="off"
+        />
+      }
+
+      @case('email'){
+        <input
+          matInput
+          [type]="customInput.type"
+          [placeholder]="customInput.placeholder"
+          (input)="onInput($event)"
+          (blur)="onTouched()"
+          [id]="customInput.id"
+          [name]="customInput.name"
+          [class]="customInput.class"
+          [formControl]="formControl"
+          autocomplete="off"
+        />
+      }
+
+      @case('select') {
+        <mat-select
+          (selectionChange)="onSelect($event)"
+          [id]="customInput.id"
+          [formControl]="formControl"
+        >
+          @for(option of customInput.options; track $index) {
+            <mat-option [value]="option.value">{{ option.label }}</mat-option>
+          }
+        </mat-select>
+      }
+
+      @case('textarea'){
+        <textarea
+          matInput
+          [placeholder]="customInput.placeholder"
+          (input)="onInput($event)"
+          (blur)="onTouched()"
+          [id]="customInput.id"
+          [name]="customInput.name"
+          [class]="customInput.class"
+          [rows]="customInput.rows || 3"
+          [formControl]="formControl"
+        ></textarea>
+      }
+
+      @case('tel') {
+        <input
+          matInput
+          type="tel"
+          [placeholder]="customInput.placeholder"
+          (input)="onInput($event)"
+          (blur)="onTouched()"
+          [id]="customInput.id"
+          [name]="customInput.name"
+          [class]="customInput.class"
+          [formControl]="formControl"
+          autocomplete="tel"
+        />
+      }
+
+      @case('url') {
+        <input
+          matInput
+          type="url"
+          [placeholder]="customInput.placeholder"
+          (input)="onInput($event)"
+          (blur)="onTouched()"
+          [id]="customInput.id"
+          [name]="customInput.name"
+          [class]="customInput.class"
+          [formControl]="formControl"
+          autocomplete="url"
+        />
+      }
+
+      @case('date') {
+        <input
+          matInput
+          type="date"
+          [placeholder]="customInput.placeholder"
+          (input)="onInput($event)"
+          (blur)="onTouched()"
+          [id]="customInput.id"
+          [name]="customInput.name"
+          [class]="customInput.class"
+          [formControl]="formControl"
+        />
+      }
+
+      @case('time') {
+        <input
+          matInput
+          type="time"
+          [placeholder]="customInput.placeholder"
+          (input)="onInput($event)"
+          (blur)="onTouched()"
+          [id]="customInput.id"
+          [name]="customInput.name"
+          [class]="customInput.class"
+          [formControl]="formControl"
+        />
+      }
+
+      @case('file') {
+        <input
+          matInput
+          type="file"
+          [id]="customInput.id"
+          [name]="customInput.name"
+          [class]="customInput.class"
+          (change)="onFileChange($event)"
+          [attr.accept]="customInput.accept || '*'"
+        />
+      }
+
     }
 
-    @case ('number') {
-      <input
-        matInput
-        [type]="customInput.type"
-        [placeholder]="customInput.placeholder"
-        (input)="onInput($event)"
-        (blur)="onTouched()"
-        [id]="customInput.id"
-        [name]="customInput.name"
-        [class]="customInput.class"
-        [formControl]="formControl"
-        autocomplete="off"
-      />
-    }
-
-    @case ('password') {
-      <input
-        matInput
-        [type]="customInput.type"
-        [placeholder]="customInput.placeholder"
-        (input)="onInput($event)"
-        (blur)="onTouched()"
-        [id]="customInput.id"
-        [name]="customInput.name"
-        [class]="customInput.class"
-        [formControl]="formControl"
-        autocomplete="off"
-      />
-    }
-
-    @case('email'){
-      <input
-        matInput
-        [type]="customInput.type"
-        [placeholder]="customInput.placeholder"
-        (input)="onInput($event)"
-        (blur)="onTouched()"
-        [id]="customInput.id"
-        [name]="customInput.name"
-        [class]="customInput.class"
-        [formControl]="formControl"
-        autocomplete="off"
-      />
-    }
-
-    @case('select') {
-      <mat-select
-        (selectionChange)="onSelect($event)"
-        [id]="customInput.id"
-        [formControl]="formControl"
+    <!-- icon -->
+    @if(customInput.icon) {
+      <mat-icon
+        matSuffix
+        [style.cursor]="customInput.toggleIcon ? 'pointer' : 'default'"
+        (click)="customInput.toggleIcon ? toggleIcon() : null"
       >
-        @for(option of customInput.options; track $index) {
-          <mat-option [value]="option.value">{{ option.label }}</mat-option>
-        }
-      </mat-select>
+        {{ customInput.icon }}
+      </mat-icon>
     }
 
-    @case('textarea'){
-      <textarea
-        matInput
-        [placeholder]="customInput.placeholder"
-        (input)="onInput($event)"
-        (blur)="onTouched()"
-        [id]="customInput.id"
-        [name]="customInput.name"
-        [class]="customInput.class"
-        [rows]="customInput.rows || 3"
-        [formControl]="formControl"
-      ></textarea>
+    <!-- hint -->
+    @if(!customInput.disabled && customInput.hint){
+      <mat-hint>{{ customInput.hint }}</mat-hint>
     }
 
-    @case('radio') {
-      <mat-radio-group [formControl] = "formControl">
-        @for(option of customInput.options ?? []; track option) {
-          <mat-radio-button [value]="option.value">{{ option.label }}</mat-radio-button>
-        }
-      </mat-radio-group>
-    }
-
-    @case('checkbox') {
-      <mat-checkbox [formControl] = "formControl">{{ customInput.label }}</mat-checkbox>
-    }
-
-    @case('tel') {
-      <input
-        matInput
-        type="tel"
-        [placeholder]="customInput.placeholder"
-        (input)="onInput($event)"
-        (blur)="onTouched()"
-        [id]="customInput.id"
-        [name]="customInput.name"
-        [class]="customInput.class"
-        [formControl]="formControl"
-        autocomplete="tel"
-      />
-    }
-
-    @case('url') {
-      <input
-        matInput
-        type="url"
-        [placeholder]="customInput.placeholder"
-        (input)="onInput($event)"
-        (blur)="onTouched()"
-        [id]="customInput.id"
-        [name]="customInput.name"
-        [class]="customInput.class"
-        [formControl]="formControl"
-        autocomplete="url"
-      />
-    }
-
-    @case('date') {
-      <input
-        matInput
-        type="date"
-        [placeholder]="customInput.placeholder"
-        (input)="onInput($event)"
-        (blur)="onTouched()"
-        [id]="customInput.id"
-        [name]="customInput.name"
-        [class]="customInput.class"
-        [formControl]="formControl"
-      />
-    }
-
-    @case('time') {
-      <input
-        matInput
-        type="time"
-        [placeholder]="customInput.placeholder"
-        (input)="onInput($event)"
-        (blur)="onTouched()"
-        [id]="customInput.id"
-        [name]="customInput.name"
-        [class]="customInput.class"
-        [formControl]="formControl"
-      />
-    }
-
-    @case('file') {
-      <input
-        matInput
-        type="file"
-        [id]="customInput.id"
-        [name]="customInput.name"
-        [class]="customInput.class"
-        (change)="onFileChange($event)"
-        [attr.accept]="customInput.accept || '*'"
-      />
-    }
-
-  }
-
-  <!-- icon -->
-  @if(customInput.icon) {
-    <mat-icon
-      matSuffix
-      [style.cursor]="customInput.toggleIcon ? 'pointer' : 'default'"
-      (click)="customInput.toggleIcon ? toggleIcon() : null"
-    >
-      {{ customInput.icon }}
-    </mat-icon>
-  }
-
-  <!-- hint -->
-  @if(!customInput.disabled && customInput.hint){
-    <mat-hint>{{ customInput.hint }}</mat-hint>
-  }
-
-</mat-form-field>
+  </mat-form-field>
+}
 <!-- error messages -->
 @for (error of getErrorKeys(); track $index)
 {
@@ -205,3 +213,4 @@
     </mat-error>
   }
 }
+

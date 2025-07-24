@@ -1,13 +1,14 @@
 import { Component, inject, Input } from '@angular/core';
-import { CustomInput } from '../../../shared/components/custom-input/custom-input';
 import { LoginInterface } from '../../../core/models/login.interface';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LoginService } from '../../../core/services/auth/login';
 import { Router } from '@angular/router';
+import { DynamicForm } from '../../../shared/components/dynamic-form/dynamic-form';
+import { FieldConfigInterface } from '../../../core/models/field-config.interface';
 
 @Component({
   selector: 'app-login',
-  imports: [CustomInput, ReactiveFormsModule],
+  imports: [DynamicForm, ReactiveFormsModule],
   templateUrl: './login.html',
   styleUrl: './login.scss'
 })
@@ -42,6 +43,52 @@ export class Login {
 
   get passwordControl(): FormControl{
     return this.loginForm.get('password') as FormControl;
+  }
+
+  formJson: FieldConfigInterface[] = [
+    {
+      inputfield: {
+        type: 'email',
+        label: 'Email',
+        placeholder: 'Enter your email',
+        id: 'email',
+        name: 'email',
+        icon: 'email',
+        hint: 'xyz123@gmail.com',
+        disabled: false,
+      }, validators: ['required']
+    },
+    {
+      inputfield: {
+        appearance: 'outline',
+        type: 'password',
+        label: 'Password',
+        placeholder: 'Enter your password',
+        id: 'password',
+        name: 'password',
+        icon: 'visibility',
+        disabled: false,
+        toggleIcon: true,
+        toggleTypes: ['password', 'text'],
+        toggleIcons: ['visibility', 'visibility_off']
+      }, validators: ['required']
+    },
+    {
+      inputfield: {
+        name:'rememberMe',
+        label:'Remember Me',
+        type:'checkbox',
+        disabled:false,
+        id:'checkbox',
+        appearance:'outline',
+        placeholder:'',
+      }
+    }
+  ]
+
+  onDynamicFormSubmit(loginCredentials: LoginInterface) {
+    
+    console.log("Dynamic form submit:", loginCredentials);
   }
 
 }
