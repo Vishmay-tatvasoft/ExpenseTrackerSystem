@@ -124,7 +124,7 @@
   }
 
   <!-- error messages -->
-  @if(formControl.invalid && (formControl.touched || formControl.dirty))
+  @if(shouldShowErrors())
   {
     <mat-error>
       @for(error of getErrorKeys(); track $index)
