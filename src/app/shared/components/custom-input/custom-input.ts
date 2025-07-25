@@ -31,7 +31,7 @@ export class CustomInput implements ControlValueAccessor {
   @Input() formControl!: FormControl;
   @Input() customErrors?: { [Key: string]: string };
   @Output() valueChange = new EventEmitter<string>();
-  
+
   toggleIndex: number = 0;
 
   onChange = (value: any) => { };
@@ -91,7 +91,6 @@ export class CustomInput implements ControlValueAccessor {
 
   }
 
-
   getErrorKeys(): string[] {
     return this.formControl?.errors ? Object.keys(this.formControl.errors) : [];
   }
@@ -119,7 +118,5 @@ export class CustomInput implements ControlValueAccessor {
         return 'Invalid field.';
     }
   }
-
-
 
 }

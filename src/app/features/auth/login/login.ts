@@ -83,6 +83,7 @@ export class Login {
         id: 'checkbox',
         appearance: 'outline',
         placeholder: '',
+        value:false
       }
     }
   ]
