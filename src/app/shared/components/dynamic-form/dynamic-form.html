@@ -9,7 +9,7 @@
             type: field.inputfield.type || 'text',
             placeholder: field.inputfield.placeholder,
             name: field.inputfield.name || '',
-            value: field.inputfield.value || '',
+            value: field.inputfield.value || '',  
             hint: field.inputfield.hint || '',
             class: field.inputfield.class || '',
             id: field.inputfield.id || '',
@@ -22,17 +22,15 @@
           }"
       >
       </app-custom-input>
+      @if(field.inputfield.matchWith && form.errors?.['fieldsMismatch'] && getFormControl(field.inputfield.name).touched)
+      {
+        <mat-error>
+          <span>{{ form.errors?.['fieldsMismatch'].message }}</span>
+        </mat-error>
+      }
   }
+
   <app-custom-button
-    [config]="{
-      type: 'submit',
-      label: 'Submit',
-      style: 'success',
-      size: 'lg',
-      icon: 'send',
-      block: true,
-      disabled: form.invalid,
-      class: 'mt-3',
-    }"
+    [config]="mergedButtonConfig"
   ></app-custom-button>
 </form>

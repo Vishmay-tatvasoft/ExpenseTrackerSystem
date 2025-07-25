@@ -31,7 +31,7 @@ export class CustomInput implements ControlValueAccessor {
   @Input() formControl!: FormControl;
   @Input() customErrors?: { [Key: string]: string };
   @Output() valueChange = new EventEmitter<string>();
-  
+
   toggleIndex: number = 0;
 
   onChange = (value: any) => { };
@@ -115,11 +115,21 @@ export class CustomInput implements ControlValueAccessor {
         return 'Invalid pattern.';
       case 'usernameTaken':
         return 'Username is already taken.';
+      case 'missingUpperCase':
+        return `${this.customInput.label} must contain uppercase letter.`;
+      case 'missingLowerCase':
+        return `${this.customInput.label} must contain lowercase letter.`;
+      case 'missingDigit':
+        return `${this.customInput.label} must include a number.`;
+      case 'missingSpecialCharacter':
+        return `${this.customInput.label} must include a special character.`
       default:
         return 'Invalid field.';
     }
   }
 
-
+  get showFieldMismatch(): boolean {
+    return this.formControl?.hasError('fieldsMismatch') && this.formControl?.touched;
+  }
 
 }
