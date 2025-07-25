@@ -1,3 +1,5 @@
-<!--  -->
-
+<h5 class="fw-semibold mb-4 text-center">Sign into your account</h5>
 <app-dynamic-form [formJson]="formJson" (formSubmit)="onDynamicFormSubmit($event)"></app-dynamic-form>
+<span class="d-flex justify-content-center align-items-center">
+  Don't have an account?&nbsp;<a routerLink="/auth/register">Register here</a>
+</span>
