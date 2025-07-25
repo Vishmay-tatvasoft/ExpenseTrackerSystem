@@ -11,4 +11,5 @@ import { CustomButtonInterface } from '../../../core/models/custom-button.interf
 })
 export class CustomButton {
   @Input() config!: CustomButtonInterface;
+  
 }
