@@ -16,4 +16,5 @@ export interface CustomInputInterface {
   toggleIcon?: boolean;
   toggleTypes?: string[];
   toggleIcons?: string[];
+  matchWith?:string;
 }
