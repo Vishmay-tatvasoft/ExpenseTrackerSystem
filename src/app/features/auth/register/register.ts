@@ -30,5 +30,4 @@ export class Register {
   onDynamicFormSubmit(formValue: SignUpInterface) {
     this.router.navigate(['/auth/login']);
   }
-  
 }

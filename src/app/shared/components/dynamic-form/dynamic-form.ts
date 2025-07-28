@@ -31,6 +31,7 @@ export class DynamicForm implements OnInit {
   };
   @Input() submitFn!: (payload: any) => Observable<any>;
   @Input() excludeFields: string[] = [];
+  @Input() additionalFields?: { [Key: string]: any };
   @Output() formSubmit: EventEmitter<any> = new EventEmitter<any>(); // for routinh navigation after successful submission of data
 
   form!: FormGroup;
@@ -55,13 +56,13 @@ export class DynamicForm implements OnInit {
 
       // Cross Field Validations
       if (field.matchesWith) {
-        matchFields.push({ field: field.inputfield.name,matchesWith: field.matchesWith })
+        matchFields.push({ field: field.inputfield.name, matchesWith: field.matchesWith })
       }
     }
 
     const formGroup = this.fb.group(group);
 
-    for(let match of matchFields){
+    for (let match of matchFields) {
       formGroup.addValidators(MatchFieldsValidator(match.matchesWith, match.field));
     }
     return formGroup;
@@ -93,8 +94,14 @@ export class DynamicForm implements OnInit {
   onSubmit() {
     if (this.form.valid) {
       const rawData = this.form.value;
+
+      const finalPayload = {
+        ...rawData,
+        ...(this.additionalFields ?? {})
+      }
+
       const secretKey = environment.secretKey;
-      const encryptedKey = encryptedPayload(rawData, secretKey, this.excludeFields);
+      const encryptedKey = encryptedPayload(finalPayload, secretKey, this.excludeFields);
       this.submitFn(encryptedKey).subscribe({
         next: res => {
           this.toastr.success(res.message);
@@ -104,7 +111,7 @@ export class DynamicForm implements OnInit {
           this.toastr.error(err?.error?.message || 'Submission failed');
         }
       });
-      console.log("Dynamic form submitted:",this.form.value);
+      console.log("Dynamic form submitted:", this.form.value);
     } else {
       this.form.markAllAsTouched();
     }
@@ -121,10 +128,10 @@ export class DynamicForm implements OnInit {
     };
   }
 
-  getDefaultValue(type:string, value:any){
-    if(value !== undefined) return value;
+  getDefaultValue(type: string, value: any) {
+    if (value !== undefined) return value;
 
-    switch(type) {
+    switch (type) {
       case 'checkbox':
         return false;
       case 'number':

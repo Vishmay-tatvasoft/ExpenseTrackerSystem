@@ -68,7 +68,6 @@ export class OtpVerification implements AfterViewInit{
     }
 
     this.verifying = true;
-    debugger;
     const secretKey = `${environment.secretKey}`;
     const encrypted = encryptedPayload({ emailAddress:this.userEmail, OTP: otpCode }, secretKey);
     this.optVerificationService.verifyOTP(encrypted).subscribe({
