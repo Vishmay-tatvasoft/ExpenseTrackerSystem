@@ -1,0 +1,52 @@
+<div
+    class="container p-4 rounded-3 w-75"
+
+  >
+    <i class="fa-solid fa-lock fs-2 mb-4"></i>
+    <h2 class="text-center">Reset Password</h2>
+    <p class="text-center ">Enter your code here</p>
+
+    <div class="row mb-3 input_field">
+      <div class="col-12 d-flex justify-content-center gap-2">
+        <input
+          *ngFor="let input of otpInputs; let i = index"
+          maxlength="1"
+          class="form-control text-center"
+          [id]="'code_val_' + (i + 1)"
+          [(ngModel)]="otp[i]"
+          (input)="onInput($event, i)"
+          (paste)="onPaste($event)"
+          #otpInput
+          autocomplete="off"
+        />
+      </div>
+    </div>
+
+    <div class="col-12 mb-3 text-center">
+      <button
+        class="btn btn-primary w-100"
+        [disabled]="verifying"
+        (click)="verifyOtp()"
+      >
+        Verify
+      </button>
+    </div>
+
+    <p class="text-center">Having trouble receiving the code?</p>
+    <div class="text-center">
+      <button
+        class="btn btn-secondary"
+        [disabled]="resendDisabled"
+        (click)="resendOtp()"
+        #resendCodeBtn
+      >
+        {{ resendButtonText }}
+      </button>
+    </div>
+
+    <hr class="" />
+    <div class="text-center">
+      <p>Remember your password?</p>
+      <a routerLink="/auth/login" class="btn btn-dark">Go Back</a>
+    </div>
+  </div>
