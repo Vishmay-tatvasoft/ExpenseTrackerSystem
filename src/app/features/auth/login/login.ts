@@ -7,6 +7,7 @@ import { DynamicForm } from '../../../shared/components/dynamic-form/dynamic-for
 import { FieldConfigInterface } from '../../../core/models/field-config.interface';
 import { environment } from '../../../environment/environment';
 import { encryptedPayload } from '../../../shared/utils/encryptedPayload.utility';
+import { Loader } from '../../../core/services/global/loader';
 
 @Component({
   selector: 'app-login',
@@ -18,6 +19,7 @@ export class Login {
   loginForm!: FormGroup
   loginService = inject(LoginService);
   router = inject(Router);
+  loaderService = inject(Loader);
   @Input() loginCredentials!: LoginInterface;
 
   constructor(private fb: FormBuilder) {
@@ -30,12 +32,16 @@ export class Login {
 
   onSubmit(): void {
     if (this.loginForm.invalid) return;
+    debugger;
+    this.loaderService.showLoader();
     this.loginService.login(this.loginForm.value).subscribe({
       next: () => {
         this.router.navigate(['/dashboard']);
+        this.loaderService.hideLoader();
       },
       error: (error) => {
         console.error('login failed:', error);
+        this.loaderService.hideLoader();
       }
     })
   }
@@ -92,11 +98,15 @@ export class Login {
   onDynamicFormSubmit(loginCredentials: LoginInterface) {
     const secretKey = `${environment.secretKey}`;
     const encrypted = encryptedPayload(loginCredentials, secretKey);
+    debugger;
+    this.loaderService.showLoader();
     this.loginService.login(loginCredentials).subscribe({
       next: () => {
+        this.loaderService.hideLoader();
         this.router.navigate(['/dashboard']);
       },
       error: (error) => {
+        this.loaderService.hideLoader();
         console.error('login failed:', error);
       }
     });

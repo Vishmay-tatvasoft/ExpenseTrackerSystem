@@ -40,7 +40,11 @@ export class DynamicForm implements OnInit {
 
     for (let field of config) {
       const validators = this.mapValidators(field.validators!);
-      group[field.inputfield.name] = this.fb.control(field.inputfield.value || '', validators);
+      const name = field.inputfield.name;
+      const type = field.inputfield.type;
+      const value = field.inputfield.value;
+      let defaultValue = this.getDefaultValue(type, value);
+      group[name] = this.fb.control(defaultValue, validators);
 
       // Cross Field Validations
       if (field.matchesWith) {
@@ -98,5 +102,17 @@ export class DynamicForm implements OnInit {
     };
   }
 
+  getDefaultValue(type:string, value:any){
+    if(value !== undefined) return value;
+
+    switch(type) {
+      case 'checkbox':
+        return false;
+      case 'number':
+        return 0;
+      default:
+        return '';
+    }
+  }
 
 }
