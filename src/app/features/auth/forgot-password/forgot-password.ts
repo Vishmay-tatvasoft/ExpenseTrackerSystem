@@ -7,6 +7,7 @@ import { CustomButtonInterface } from '../../../core/models/custom-button.interf
 import { ForgotPasswordService } from '../../../core/services/auth/forgot-password';
 import { environment } from '../../../environment/environment';
 import { encryptedPayload } from '../../../shared/utils/encryptedPayload.utility';
+import { forgotPasswordButtonConfig } from './forgot-password.button';
 
 @Component({
   selector: 'app-forgot-password',
@@ -15,21 +16,12 @@ import { encryptedPayload } from '../../../shared/utils/encryptedPayload.utility
   styleUrl: './forgot-password.scss'
 })
 export class ForgotPassword {
-  forgotPasswordForm!: FormGroup;
   forgotPasswordService = inject(ForgotPasswordService);
   router = inject(Router);
 
-  forgotPasswordButtonConfig:CustomButtonInterface = {
-    size:'lg',
-    label:'submit',
-    ariaLabel:'Submit',
-    block:true,
-    class:'btn btn-success',
-    icon:'send',
-    type:'submit',
-    loading:false,
-    disabled:true
-  }
+  forgotPasswordForm!: FormGroup;
+  forgotPasswordButtonConfig:CustomButtonInterface = forgotPasswordButtonConfig;
+
   constructor(private fb: FormBuilder) {
     this.forgotPasswordForm = fb.group({
       emailAddress: fb.control('',[Validators.required, Validators.email])
@@ -40,8 +32,6 @@ export class ForgotPassword {
       this.forgotPasswordButtonConfig.disabled = this.forgotPasswordForm.invalid;
     });
   }
-
-
 
   getFormControl(name: string): FormControl {
     return this.forgotPasswordForm.get(name) as FormControl;
@@ -68,8 +58,5 @@ export class ForgotPassword {
         console.error("error:",err);
       }
     });
-
-
   }
-
 }
