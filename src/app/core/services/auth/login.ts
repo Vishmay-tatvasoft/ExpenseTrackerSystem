@@ -13,7 +13,10 @@ export class LoginService {
   http = inject(HttpClient);
   apiURL = `${environment.apiURI}/auth/Login`;
 
-  login(credentials: LoginInterface): Observable<ApiResponseInterface<UserInterface>>{
-    return this.http.post<ApiResponseInterface<UserInterface>>(this.apiURL, credentials, { withCredentials: true });
+  login(encryptedPayload: string): Observable<ApiResponseInterface<UserInterface>>{
+    return this.http.post<ApiResponseInterface<UserInterface>>(this.apiURL, JSON.stringify(encryptedPayload), {
+      headers: { 'Content-Type': 'application/json' },
+      withCredentials: true
+    });
   }
 }
