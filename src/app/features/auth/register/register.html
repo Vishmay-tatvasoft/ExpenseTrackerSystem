@@ -1,5 +1,13 @@
-<h5 class="fw-semibold mb-4 text-center letter-spacing-1px" >Create An account</h5>
-<app-dynamic-form [formJson]="formJson" (formSubmit)="onDynamicFormSubmit($event)" [buttonConfig]="buttonConfig"></app-dynamic-form>
+<h5 class="fw-semibold mb-4 text-center letter-spacing-1px">
+  Create An account
+</h5>
+<app-dynamic-form
+  [formJson]="formJson"
+  (formSubmit)="onDynamicFormSubmit($event)"
+  [buttonConfig]="buttonConfig"
+  [submitFn]="submitFn"
+  [excludeFields]="['confirmPassword']"
+></app-dynamic-form>
 <span class="d-flex justify-content-center align-items-center">
   Already have an account?&nbsp;<a routerLink="/auth/login">Login here</a>
 </span>

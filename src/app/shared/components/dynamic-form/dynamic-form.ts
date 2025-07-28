@@ -7,6 +7,10 @@ import { CustomButtonInterface } from '../../../core/models/custom-button.interf
 import { PasswordStrengthValidator } from '../../validators/password-strength.validator';
 import { MatchFieldsValidator } from '../../validators/match-fields.validator';
 import { MatError } from '@angular/material/form-field';
+import { Observable } from 'rxjs';
+import { environment } from '../../../environment/environment';
+import { encryptedPayload } from '../../utils/encryptedPayload.utility';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-dynamic-form',
@@ -25,10 +29,13 @@ export class DynamicForm implements OnInit {
     block: true,
     class: 'mt-3',
   };
-  @Output() formSubmit: EventEmitter<any> = new EventEmitter<any>();
+  @Input() submitFn!: (payload: any) => Observable<any>;
+  @Input() excludeFields: string[] = [];
+  @Output() formSubmit: EventEmitter<any> = new EventEmitter<any>(); // for routinh navigation after successful submission of data
 
   form!: FormGroup;
   fb = inject(FormBuilder);
+  toastr = inject(ToastrService);
 
   ngOnInit(): void {
     this.form = this.buildForm(this.formJson);
@@ -85,7 +92,19 @@ export class DynamicForm implements OnInit {
 
   onSubmit() {
     if (this.form.valid) {
-      this.formSubmit.emit(this.form.value);
+      const rawData = this.form.value;
+      const secretKey = environment.secretKey;
+      const encryptedKey = encryptedPayload(rawData, secretKey, this.excludeFields);
+      this.submitFn(encryptedKey).subscribe({
+        next: res => {
+          this.toastr.success(res.message);
+          this.formSubmit.emit(this.form.value);
+        },
+        error: err => {
+          this.toastr.error(err?.error?.message || 'Submission failed');
+        }
+      });
+      console.log("Dynamic form submitted:",this.form.value);
     } else {
       this.form.markAllAsTouched();
     }

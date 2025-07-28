@@ -2,11 +2,11 @@ import { Component, inject } from '@angular/core';
 import { FieldConfigInterface } from '../../../core/models/field-config.interface';
 import { DynamicForm } from '../../../shared/components/dynamic-form/dynamic-form';
 import { SignUpInterface } from '../../../core/models/sign-up.interface';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { CustomButtonInterface } from '../../../core/models/custom-button.interface';
-import { environment } from '../../../environment/environment';
-import { encryptedPayload } from '../../../shared/utils/encryptedPayload.utility';
 import { HttpClient } from '@angular/common/http';
+import { RegisterService } from '../../../core/services/auth/register';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-register',
@@ -16,6 +16,9 @@ import { HttpClient } from '@angular/common/http';
 })
 export class Register {
   http = inject(HttpClient);
+  registerService = inject(RegisterService);
+  toastr = inject(ToastrService);
+  router = inject(Router);
   formJson: FieldConfigInterface[] = [
     {
       inputfield: {
@@ -81,21 +84,9 @@ export class Register {
     class: 'mt-3',
   }
 
-  onDynamicFormSubmit(formData: SignUpInterface): void {
-    const secretKey = `${environment.secretKey}`;
-    const encrypted = encryptedPayload(formData, secretKey, ['confirmPassword']);
-    this.http.post(`${environment.apiURI}/Auth/register`,JSON.stringify(encrypted),{
-      headers: { 'Content-Type': 'application/json' },
-    }).subscribe({
-      next:(res) => {
-        console.log("res:",res);
-      },
-      error:(err)=>{
-        console.error("error:",err);
+  submitFn = (payload: string) => this.registerService.registerUser(payload);
 
-      }
-    });
-    console.log("Sign up values : ", formData);
-    console.log("Encrypted Payload : ", encrypted);
+  onDynamicFormSubmit(formValue: SignUpInterface) {
+    this.router.navigate(['/auth/login']);
   }
 }
