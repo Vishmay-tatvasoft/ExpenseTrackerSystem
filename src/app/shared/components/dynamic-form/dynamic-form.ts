@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FieldConfigInterface } from '../../../core/models/field-config.interface';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CustomInput } from '../custom-input/custom-input';
@@ -11,6 +11,8 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environment/environment';
 import { encryptedPayload } from '../../utils/encryptedPayload.utility';
 import { ToastrService } from 'ngx-toastr';
+import { CanComponentDeactivateInterface } from '../../../core/models/can-component-deactivate.interface';
+import { CanDeactivateService } from '../../services/can-deactivate-service';
 
 @Component({
   selector: 'app-dynamic-form',
@@ -18,7 +20,7 @@ import { ToastrService } from 'ngx-toastr';
   templateUrl: './dynamic-form.html',
   styleUrl: './dynamic-form.scss'
 })
-export class DynamicForm implements OnInit {
+export class DynamicForm implements OnInit, OnDestroy {
   @Input() formJson: FieldConfigInterface[] = [];
   @Input() buttonConfig: CustomButtonInterface = {
     type: 'submit',
@@ -37,9 +39,15 @@ export class DynamicForm implements OnInit {
   form!: FormGroup;
   fb = inject(FormBuilder);
   toastr = inject(ToastrService);
+  canDeactivateService = inject(CanDeactivateService);
 
   ngOnInit(): void {
     this.form = this.buildForm(this.formJson);
+    this.canDeactivateService.register(() => this.canDeactivate());
+  }
+
+  ngOnDestroy(): void {
+    this.canDeactivateService.clear();
   }
 
   buildForm(config: FieldConfigInterface[]): FormGroup {
@@ -91,8 +99,18 @@ export class DynamicForm implements OnInit {
     return formValidators;
   }
 
+  canDeactivate(): boolean {
+    console.log("Deactivation called");
+    if (this.form.dirty && this.form.touched) {
+      return confirm('You have unsaved changes. Do you really want to leave?');
+    }
+    return true;
+  }
+
   onSubmit() {
     if (this.form.valid) {
+      this.form.markAsPristine();
+      this.form.markAsUntouched();
       const rawData = this.form.value;
 
       const finalPayload = {

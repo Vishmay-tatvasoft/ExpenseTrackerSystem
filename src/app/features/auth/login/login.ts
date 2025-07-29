@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ViewChild } from '@angular/core';
 import { LoginInterface } from '../../../core/models/login.interface';
 import { ReactiveFormsModule } from '@angular/forms';
 import { LoginService } from '../../../core/services/auth/login';
@@ -7,6 +7,8 @@ import { DynamicForm } from '../../../shared/components/dynamic-form/dynamic-for
 import { FieldConfigInterface } from '../../../core/models/field-config.interface';
 import { loginFormJson } from './login.form';
 import { Snackbar } from '../../../shared/services/snackbar';
+import { CanComponentDeactivateInterface } from '../../../core/models/can-component-deactivate.interface';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-login',
