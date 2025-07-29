@@ -31,3 +31,28 @@ html {
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+.warn {
+  .mdc-snackbar__surface{
+    background: #fdd835;
+    color: black;
+  }
+}
+.info {
+  .mdc-snackbar__surface{
+    background: #0277bd;
+    color: white;
+  }
+}
+
+.success {
+  .mdc-snackbar__surface{
+    background: #4caf50 !important;
+    color: white;
+  }
+}
+.error {
+  .mdc-snackbar__surface{
+    background: #d32f2f;
+    color: white;
+  }
+}
