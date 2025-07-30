@@ -11,7 +11,6 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environment/environment';
 import { encryptedPayload } from '../../utils/encryptedPayload.utility';
 import { ToastrService } from 'ngx-toastr';
-import { CanComponentDeactivateInterface } from '../../../core/models/can-component-deactivate.interface';
 import { CanDeactivateService } from '../../services/can-deactivate-service';
 
 @Component({
